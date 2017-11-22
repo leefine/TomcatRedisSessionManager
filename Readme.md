@@ -14,9 +14,9 @@
     </ul>
     <h4 class="unchanged rich-diff-level-one">Dependency:</h4>
     <ol class="unchanged rich-diff-level-one">
-        <li class="unchanged">jedis.jar</li>
-        <li class="unchanged">commons-pool2.jar</li>
-        <li class="unchanged">commons-logging.jar</li>        
+        <li class="unchanged">jedis.jar（2.9.0）</li>
+        <li class="unchanged">commons-pool2.jar（2.4.2）</li>
+        <li class="unchanged">commons-logging.jar（1.2）</li>        
           <li class="unchanged">If you want put Object into Session,it must be serialized</li>
     </ol>
     <h4 class="unchanged rich-diff-level-one">Steps to be done,</h4>
