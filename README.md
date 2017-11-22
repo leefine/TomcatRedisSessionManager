@@ -1,6 +1,8 @@
-<div class="expandable unchanged js-expandable rich-diff-level-zero">
+#TomcatRedisSessionManager
 
-    <b>Tomcat Redis Session Manager For Load Banlance</b>
+
+<div class="expandable unchanged js-expandable rich-diff-level-zero">
+    <h1 class="unchanged rich-diff-level-one">Tomcat Redis Session Manager</h1>
     <p class="unchanged rich-diff-level-one">Redis session manager is pluggable one. It uses to store sessions into Redis for easy distribution of HTTP Requests across a cluster of Tomcat servers. Sessions are implemented as as non-sticky i.e, each request is forwarded to any server in round-robin manner.</p>
     <p class="unchanged rich-diff-level-one">The HTTP Requests session setAttribute(name, value) method stores the session into Redis (must be Serializable) immediately and the session getAttribute(name) method request directly from Redis. Also, the inactive sessions has been removed based on the session time-out configuration.</p>
     <p class="unchanged rich-diff-level-one">It supports, both single redis master and redis cluster based on the RedisDataCache.properties configuration.</p>
