@@ -1,21 +1,16 @@
 package com.leefine.tomcat.redis;
 
+import org.apache.catalina.*;
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.session.ManagerBase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
-
-import org.apache.catalina.Context;
-import org.apache.catalina.Lifecycle;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.LifecycleListener;
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.Valve;
-import org.apache.catalina.connector.Request;
-import org.apache.catalina.session.ManagerBase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
@@ -26,15 +21,10 @@ import org.apache.commons.logging.LogFactory;
 public class SessionManager extends ManagerBase implements Lifecycle {
 
 	private DataCache dataCache;
-
 	protected SerializationUtil serializer;
-
 	protected ThreadLocal<SessionContext> sessionContext = new ThreadLocal<>();
-
 	protected SessionHandlerValve handlerValve;
-
 	protected Set<SessionPolicy> sessionPolicy = EnumSet.of(SessionPolicy.DEFAULT);
-
 	private Log log = LogFactory.getLog(SessionManager.class);
 
 

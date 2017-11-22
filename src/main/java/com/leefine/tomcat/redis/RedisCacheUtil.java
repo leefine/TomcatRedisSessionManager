@@ -15,9 +15,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 public class RedisCacheUtil implements DataCache {
 
     private JedisPool pool;
-
     private final int numRetries = 3;
-
     private Log log = LogFactory.getLog(RedisCacheUtil.class);
 
     public RedisCacheUtil(String host, int port, String password, int database, int timeout,

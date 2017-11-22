@@ -8,9 +8,7 @@ package com.leefine.tomcat.redis;
 interface Constants {
 
     final byte[] NULL_SESSION = "null".getBytes();
-
     final String CATALINA_BASE = "catalina.base";
-
     final String CONF = "conf";
 
     // redis properties file name
@@ -43,6 +41,5 @@ interface Constants {
     final String DEFAULT_TEST_NUMPEREVICTION_VALUE = "10";
     final String DEFAULT_TIME_BETWEENEVICTION_VALUE = "60000";
     final String DEFAULT_CLUSTER_ENABLED = "false";
-
     final String CONN_FAILED_RETRY_MSG = "Jedis connection failed, retrying...";
 }

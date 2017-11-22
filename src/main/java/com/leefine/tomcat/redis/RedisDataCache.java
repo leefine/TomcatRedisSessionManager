@@ -1,28 +1,13 @@
 package com.leefine.tomcat.redis;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
-import redis.clients.jedis.exceptions.JedisClusterMaxRedirectionsException;
-import redis.clients.jedis.exceptions.JedisConnectionException;
+
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -34,7 +19,6 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 public class RedisDataCache implements DataCache {
 
 	private static DataCache dataCache;
-
 	private Log log = LogFactory.getLog(RedisDataCache.class);
 
 	public RedisDataCache() {

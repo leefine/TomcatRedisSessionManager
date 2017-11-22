@@ -1,20 +1,14 @@
 package com.leefine.tomcat.redis;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import org.apache.catalina.util.CustomObjectInputStream;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.*;
 import java.security.MessageDigest;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.catalina.util.CustomObjectInputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
@@ -25,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 public class SerializationUtil {
 
 	private ClassLoader loader;
-
 	private Log log = LogFactory.getLog(SerializationUtil.class);
 
 	/**

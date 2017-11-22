@@ -19,9 +19,7 @@ import java.util.Set;
 public class RedisClusterCacheUtil implements DataCache {
 
     private JedisCluster cluster;
-
     private final int numRetries = 30;
-
     private Log log = LogFactory.getLog(RedisClusterCacheUtil.class);
 
     public RedisClusterCacheUtil(Set<HostAndPort> nodes, int timeout, JedisPoolConfig poolConfig) {

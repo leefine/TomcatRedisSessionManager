@@ -1,5 +1,8 @@
 package com.leefine.tomcat.redis;
 
+import org.apache.catalina.Manager;
+import org.apache.catalina.session.StandardSession;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -7,9 +10,6 @@ import java.security.Principal;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.catalina.Manager;
-import org.apache.catalina.session.StandardSession;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
@@ -22,11 +22,8 @@ public class Session extends StandardSession {
 	//private static final long serialVersionUID = -6056744304016869278L;
 
 	protected Boolean dirty;
-
 	protected Map<String, Object> changedAttributes;
-
 	protected static Boolean manualDirtyTrackingSupportEnabled = false;
-
 	protected static String manualDirtyTrackingAttributeKey = "__changed__";
 
 	public Session(Manager manager) {

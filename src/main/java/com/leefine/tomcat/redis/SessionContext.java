@@ -9,11 +9,8 @@ package com.leefine.tomcat.redis;
 public class SessionContext {
 
 	private String id;
-
 	private Session session;
-
 	private boolean persisted;
-
 	private SessionMetadata metadata;
 
 	/**
