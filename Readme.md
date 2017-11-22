@@ -56,42 +56,8 @@
     </ul>
      <h3 class="unchanged rich-diff-level-one">
       Config Nginx:</h3>   
-      
-      
-      #user  nobody;
-worker_processes  1;
+ <ul class="unchanged rich-diff-level-one">
+        <li class="unchanged">Nginx.conf</li>
+    </ul>
 
-#error_log  logs/error.log;
-#error_log  logs/error.log  notice;
-#error_log  logs/error.log  info;
-
-#pid        logs/nginx.pid;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-    log_format main ‘$remote_addr – $remote_user [$time_local] “$request” ‘‘$status $body_bytes_sent “$http_referer” ‘‘”$http_user_agent” $http_x_forwarded_for’;
-    include       mime.types;
-    default_type  application/octet-stream;
-	access_log    logs/access.log  main;
-	sendfile      on;
-	keepalive_timeout  65;
-    upstream epower {
-        least_conn;
-        server 127.0.0.1:8090;
-        server 127.0.0.1:8091;
-    }
-    server {
-        listen 8080;
-        location / {
-            proxy_pass http://epower;
-            proxy_set_header Host $host:$server_port;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header REMOTE-HOST $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-    }
-}
 </div>
