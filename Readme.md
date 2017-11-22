@@ -48,16 +48,18 @@
                 <li class="unchanged"><strong>&lt;/session-config&gt;</strong></li>
             </ul>
         </li>
+         <li class="unchanged">
+            <p class="unchanged">Config Nginx</p>
+            <ul class="unchanged">
+               <li class="unchanged">Check file <b>Nginx.conf</b></li>
+            </ul>
+        </li>
     </ol>
     <h3 class="unchanged rich-diff-level-one">
       Note:</h3>
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">This supports, both redis stand-alone and multiple node cluster based on the redis-data-cache.properties configuration.</li>
     </ul>
-     <h3 class="unchanged rich-diff-level-one">
-      Config Nginx:</h3>   
- <ul class="unchanged rich-diff-level-one">
-        <li class="unchanged">Nginx.conf</li>
-    </ul>
+   
 
 </div>
