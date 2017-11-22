@@ -6,6 +6,7 @@
     <groupId>com.leefine</groupId>
     <artifactId>TomcatRedisSessionManager</artifactId>
     <version>1.0.0</version>
+    <url>https://github.com/leefine/TomcatRedisSessionManager</url>
     <build>
         <plugins>
             <plugin>

@@ -2,7 +2,6 @@ package com.leefine.tomcat.redis;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * <p>
  * Redis data-cache constants.
  */
 interface Constants {

@@ -2,9 +2,7 @@ package com.leefine.tomcat.redis;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * 
  * API for Data cache.
-
  */
 public interface DataCache {
 
@@ -52,5 +50,4 @@ public interface DataCache {
 	 * @return
 	 */
 	Long delete(String key);
-
 }

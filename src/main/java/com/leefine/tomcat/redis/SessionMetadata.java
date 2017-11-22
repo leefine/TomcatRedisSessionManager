@@ -10,11 +10,8 @@ import java.io.Serializable;
  * 
  * This class is uses to store and retrieve the HTTP request session object
  * meta-data.
-
  */
 public class SessionMetadata implements Serializable {
-
-	//private static final long serialVersionUID = 124438185184833546L;
 
 	private byte[] attributesHash;
 
