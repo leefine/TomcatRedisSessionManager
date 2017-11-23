@@ -14,8 +14,7 @@ import java.util.Set;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * Manager that implements per-request session persistence. It is intended to be
- * used with non-sticky load-balancers.
+ * Manager that implements per-request session persistence. It is intended to be used with non-sticky load-balancers.
  */
 public class SessionManager extends ManagerBase implements Lifecycle {
 
