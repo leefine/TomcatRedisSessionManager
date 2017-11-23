@@ -11,10 +11,8 @@ import java.util.*;
 
 
 /**
- * Tomcat clustering with Redis data-cache implementation.
- * 
+ * Tomcat clustering with Redis data-cache implementation. 
  * Redis data-cache implementation to store/retrieve session objects.
-
  */
 public class RedisDataCache implements DataCache {
 
@@ -25,52 +23,35 @@ public class RedisDataCache implements DataCache {
 		initialize();
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public byte[] set(String key, byte[] value) {
 		return dataCache.set(key, value);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Long setnx(String key, byte[] value) {
 		return dataCache.setnx(key, value);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Long expire(String key, int seconds) {
 		return dataCache.expire(key, seconds);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public byte[] get(String key) {
 		return (key != null) ? dataCache.get(key) : null;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Long delete(String key) {
 		return dataCache.delete(key);
 	}
 
-	/**
-	 * To parse data-cache key
-	 * 
-	 * @param key
-	 * @return
-	 */
 	public static String parseDataCacheKey(String key) {
 		return key.replaceAll("\\s", "_");
 	}
 
-	/**
-	 * To initialize the data-cache
-	 * 
-	 * @param properties
-	 * @param filePath
-	 */
 	@SuppressWarnings("unchecked")
 	private void initialize() {
 		if (dataCache != null) {
@@ -99,12 +80,6 @@ public class RedisDataCache implements DataCache {
 		}
 	}
 
-	/**
-	 * To get jedis pool configuration
-	 * 
-	 * @param properties
-	 * @return
-	 */
 	private JedisPoolConfig getPoolConfig(Properties properties) {
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		int maxActive = Integer.parseInt(properties.getProperty(Constants.MAX_ACTIVE, Constants.DEFAULT_MAX_ACTIVE_VALUE));
@@ -133,13 +108,6 @@ public class RedisDataCache implements DataCache {
 		return poolConfig;
 	}
 
-	/**
-	 * To get jedis nodes
-	 * 
-	 * @param hosts
-	 * @param clusterEnabled
-	 * @return
-	 */
 	private Collection<? extends Serializable> getJedisNodes(String hosts, boolean clusterEnabled) {
 		hosts = hosts.replaceAll("\\s", "");
 		String[] hostPorts = hosts.split(",");
@@ -166,12 +134,6 @@ public class RedisDataCache implements DataCache {
 		return clusterEnabled ? nodes : node;
 	}
 
-	/**
-	 * To load data-cache properties
-	 * 
-	 * @param filePath
-	 * @return
-	 */
 	private Properties loadProperties() {
 		Properties properties = new Properties();
 		try {
@@ -196,8 +158,4 @@ public class RedisDataCache implements DataCache {
 		}
 		return properties;
 	}
-
-
-
-
 }
