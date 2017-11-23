@@ -12,31 +12,17 @@ import java.util.Map;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * 
  * Session serialization utility.
-
  */
 public class SerializationUtil {
 
 	private ClassLoader loader;
 	private Log log = LogFactory.getLog(SerializationUtil.class);
 
-	/**
-	 * To set class loader
-	 * 
-	 * @param loader
-	 */
 	public void setClassLoader(ClassLoader loader) {
 		this.loader = loader;
 	}
 
-	/**
-	 * To get session attributes hash code
-	 * 
-	 * @param session
-	 * @return
-	 * @throws IOException
-	 */
 	public byte[] getSessionAttributesHashCode(Session session) throws IOException {
 		byte[] serialized = null;
 		Map<String, Object> attributes = new HashMap<String, Object>();
@@ -62,14 +48,6 @@ public class SerializationUtil {
 		return digester.digest(serialized);
 	}
 
-	/**
-	 * To serialize session object
-	 * 
-	 * @param session
-	 * @param metadata
-	 * @return
-	 * @throws IOException
-	 */
 	public byte[] serializeSessionData(Session session, SessionMetadata metadata) throws IOException {
 		byte[] serialized = null;
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -82,15 +60,6 @@ public class SerializationUtil {
 		return serialized;
 	}
 
-	/**
-	 * To de-serialize session object
-	 * 
-	 * @param data
-	 * @param session
-	 * @param metadata
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
 	public void deserializeSessionData(byte[] data, Session session, SessionMetadata metadata)
 			throws IOException, ClassNotFoundException {
 		try (BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(data));
