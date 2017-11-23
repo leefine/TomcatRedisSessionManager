@@ -4,8 +4,7 @@
     <p class="unchanged rich-diff-level-one">The HTTP Requests session setAttribute(name, value) method stores the session into Redis (must be Serializable) immediately and the session getAttribute(name) method request directly from Redis. Also, the inactive sessions has been removed based on the session time-out configuration.</p>
     <p class="unchanged rich-diff-level-one">It supports, both single redis master and redis cluster based on the RedisDataCache.properties configuration.</p>
     <p class="unchanged rich-diff-level-one">Going forward, we no need to enable sticky session (JSESSIONID) in Load balancer.</p>    
-    <p class="unchanged rich-diff-level-one">Download:https://github.com/leefine/TomcatRedisSessionManager/releases/download/1.0/TomcatRedisSessionManager-1.0.0.zip
-    </p>
+    <p class="unchanged rich-diff-level-one"><a href="https://github.com/leefine/TomcatRedisSessionManager/releases/download/1.0/TomcatRedisSessionManager-1.0.0.zip">Download:TomcatRedisSessionManager.zip </a>  </p>
     <h2 class="unchanged rich-diff-level-one">Supports:</h2>
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">Apache Tomcat 7</li>
