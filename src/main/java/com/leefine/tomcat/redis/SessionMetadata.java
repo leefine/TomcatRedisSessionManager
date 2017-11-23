@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * 
  * This class is uses to store and retrieve the HTTP request session object
  * meta-data.
  */
