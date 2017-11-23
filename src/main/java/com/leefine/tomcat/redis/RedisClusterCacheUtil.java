@@ -12,9 +12,7 @@ import java.util.Set;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * <p>
  * Redis multiple node cluster data-cache implementation.
-
  */
 public class RedisClusterCacheUtil implements DataCache {
 
@@ -26,9 +24,6 @@ public class RedisClusterCacheUtil implements DataCache {
         cluster = new JedisCluster(nodes, timeout, poolConfig);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public byte[] set(String key, byte[] value) {
         int tries = 0;
@@ -50,9 +45,6 @@ public class RedisClusterCacheUtil implements DataCache {
         return (retVal != null) ? retVal.getBytes() : null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long setnx(String key, byte[] value) {
         int tries = 0;
@@ -74,9 +66,6 @@ public class RedisClusterCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long expire(String key, int seconds) {
         int tries = 0;
@@ -98,9 +87,6 @@ public class RedisClusterCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public byte[] get(String key) {
         int tries = 0;
@@ -122,9 +108,6 @@ public class RedisClusterCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long delete(String key) {
         int tries = 0;
