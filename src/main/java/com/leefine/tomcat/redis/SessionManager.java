@@ -14,7 +14,6 @@ import java.util.Set;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * 
  * Manager that implements per-request session persistence. It is intended to be
  * used with non-sticky load-balancers.
  */
@@ -240,7 +239,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 	private void initialize() {
 		try {
 			this.dataCache = new RedisDataCache();
-
 			this.serializer = new SerializationUtil();
 			Context context = getContextIns();
 			ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
@@ -315,7 +313,8 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 	 */
 	private int getSessionTimeout() {
 		int timeout = getContextIns().getSessionTimeout() * 60;
-		return (timeout < 1800) ? 1800 : timeout;
+		return timeout;
+		//return (timeout < 1800) ? 1800 : timeout;
 	}
 
 	/**
