@@ -9,7 +9,6 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * <p>
  * Redis stand-alone mode data-cache implementation.
  */
 public class RedisCacheUtil implements DataCache {
@@ -18,14 +17,10 @@ public class RedisCacheUtil implements DataCache {
     private final int numRetries = 3;
     private Log log = LogFactory.getLog(RedisCacheUtil.class);
 
-    public RedisCacheUtil(String host, int port, String password, int database, int timeout,
-                          JedisPoolConfig poolConfig) {
+    public RedisCacheUtil(String host, int port, String password, int database, int timeout,JedisPoolConfig poolConfig) {
         pool = new JedisPool(poolConfig, host, port, timeout, password, database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public byte[] set(String key, byte[] value) {
         int tries = 0;
@@ -47,9 +42,6 @@ public class RedisCacheUtil implements DataCache {
         return (retVal != null) ? retVal.getBytes() : null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long setnx(String key, byte[] value) {
         int tries = 0;
@@ -71,9 +63,6 @@ public class RedisCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long expire(String key, int seconds) {
         int tries = 0;
@@ -95,9 +84,6 @@ public class RedisCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public byte[] get(String key) {
         int tries = 0;
@@ -119,9 +105,6 @@ public class RedisCacheUtil implements DataCache {
         return retVal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Long delete(String key) {
         int tries = 0;
