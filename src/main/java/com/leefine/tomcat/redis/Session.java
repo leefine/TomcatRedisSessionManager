@@ -12,14 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Tomcat clustering with Redis data-cache implementation.
- * 
+ * Tomcat clustering with Redis data-cache implementation. 
  * This class is uses to store and retrieve the HTTP request session objects.
-
  */
 public class Session extends StandardSession {
-
-	//private static final long serialVersionUID = -6056744304016869278L;
 
 	protected Boolean dirty;
 	protected Map<String, Object> changedAttributes;
@@ -52,13 +48,11 @@ public class Session extends StandardSession {
 		return this.changedAttributes;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void setAttribute(String key, Object value) {
 		if (manualDirtyTrackingSupportEnabled && manualDirtyTrackingAttributeKey.equals(key)) {
@@ -80,19 +74,16 @@ public class Session extends StandardSession {
 		}
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Object getAttribute(String name) {
 		return super.getAttribute(name);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Enumeration<String> getAttributeNames() {
 		return super.getAttributeNames();
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void removeAttribute(String name) {
 		super.removeAttribute(name);
@@ -103,28 +94,24 @@ public class Session extends StandardSession {
 		}
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void setPrincipal(Principal principal) {
 		super.setPrincipal(principal);
 		this.dirty = true;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void writeObjectData(ObjectOutputStream out) throws IOException {
 		super.writeObjectData(out);
 		out.writeLong(this.getCreationTime());
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void readObjectData(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		super.readObjectData(in);
 		this.setCreationTime(in.readLong());
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void invalidate() {
 		super.invalidate();
