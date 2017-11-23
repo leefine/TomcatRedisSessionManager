@@ -26,12 +26,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 	protected Set<SessionPolicy> sessionPolicy = EnumSet.of(SessionPolicy.DEFAULT);
 	private Log log = LogFactory.getLog(SessionManager.class);
 
-
-	/**
-	 * To get session persist policies
-	 * 
-	 * @return
-	 */
 	public String getSessionPersistPolicies() {
 		String policyStr = null;
 		for (SessionPolicy policy : this.sessionPolicy) {
@@ -40,11 +34,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		return policyStr;
 	}
 
-	/**
-	 * To set session persist policies
-	 * 
-	 * @param policyStr
-	 */
 	public void setSessionPersistPolicies(String policyStr) {
 		Set<SessionPolicy> policySet = EnumSet.of(SessionPolicy.DEFAULT);
 		String[] policyArray = policyStr.split(",");
@@ -55,39 +44,29 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		this.sessionPolicy = policySet;
 	}
 
-	/**
-	 * @return
-	 */
 	public boolean getSaveOnChange() {
 		return this.sessionPolicy.contains(SessionPolicy.SAVE_ON_CHANGE);
 	}
 
-	/**
-	 * @return
-	 */
 	public boolean getAlwaysSaveAfterRequest() {
 		return this.sessionPolicy.contains(SessionPolicy.ALWAYS_SAVE_AFTER_REQUEST);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void addLifecycleListener(LifecycleListener listener) {
 		super.addLifecycleListener(listener);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public LifecycleListener[] findLifecycleListeners() {
 		return super.findLifecycleListeners();
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void removeLifecycleListener(LifecycleListener listener) {
 		super.removeLifecycleListener(listener);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	protected synchronized void startInternal() throws LifecycleException {
 		super.startInternal();
@@ -113,14 +92,12 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		context.setDistributable(true);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	protected synchronized void stopInternal() throws LifecycleException {
 		super.setState(LifecycleState.STOPPING);
 		super.stopInternal();
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Session createSession(String sessionId) {
 		if (sessionId != null) {
@@ -154,19 +131,16 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		return session;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Session createEmptySession() {
 		return new Session(this);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void add(org.apache.catalina.Session session) {
 		save(session, false);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public Session findSession(String sessionId) throws IOException {
 		Session session = null;
@@ -209,33 +183,26 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		return session;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void remove(org.apache.catalina.Session session) {
 		remove(session, false);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void remove(org.apache.catalina.Session session, boolean update) {
 		this.dataCache.expire(session.getId(), 10);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void load() throws ClassNotFoundException, IOException {
 		// Auto-generated method stub
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public void unload() throws IOException {
 		// Auto-generated method stub
 	}
 
-	/**
-	 * To initialize the session manager
-	 */
 	private void initialize() {
 		try {
 			this.dataCache = new RedisDataCache();
@@ -249,12 +216,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		}
 	}
 
-	/**
-	 * To save session object to data-cache
-	 * 
-	 * @param session
-	 * @param forceSave
-	 */
 	public void save(org.apache.catalina.Session session, boolean forceSave) {
 		try {
 			Boolean isPersisted;
@@ -284,11 +245,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		}
 	}
 
-	/**
-	 * To process post request process
-	 * 
-	 * @param request
-	 */
 	public void afterRequest(Request request) {
 		Session session = null;
 		try {
@@ -308,19 +264,12 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		}
 	}
 
-	/**
-	 * @return
-	 */
 	private int getSessionTimeout() {
 		int timeout = getContextIns().getSessionTimeout() * 60;
 		return timeout;
 		//return (timeout < 1800) ? 1800 : timeout;
 	}
 
-	/**
-	 * @param sessionId
-	 * @param session
-	 */
 	private void setValues(String sessionId, Session session) {
 		if (this.sessionContext.get() == null) {
 			this.sessionContext.set(new SessionContext());
@@ -329,10 +278,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		this.sessionContext.get().setSession(session);
 	}
 
-	/**
-	 * @param isPersisted
-	 * @param metadata
-	 */
 	private void setValues(boolean isPersisted, SessionMetadata metadata) {
 		if (this.sessionContext.get() == null) {
 			this.sessionContext.set(new SessionContext());
@@ -341,20 +286,11 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		this.sessionContext.get().setPersisted(isPersisted);
 	}
 
-	/**
-	 * @param sessionId
-	 * @param session
-	 * @param isPersisted
-	 * @param metadata
-	 */
 	private void setValues(String sessionId, Session session, boolean isPersisted, SessionMetadata metadata) {
 		setValues(sessionId, session);
 		setValues(isPersisted, metadata);
 	}
 
-	/**
-	 * @return
-	 */
 	private Context getContextIns() {
 		try {
 			Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
