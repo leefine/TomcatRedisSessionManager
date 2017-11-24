@@ -125,8 +125,8 @@ public class SessionManager extends ManagerBase implements Lifecycle {
             session.setMaxInactiveInterval(getSessionTimeout());
             session.tellNew();
         }
+        
         //setValues(sessionId, session, false, new SessionMetadata());
-
         if (this.sessionContext.get() == null) {
             this.sessionContext.set(new SessionContext());
         }
@@ -141,13 +141,11 @@ public class SessionManager extends ManagerBase implements Lifecycle {
             } catch (Exception ex) {
                 log.error("Error occured while creating session..", ex);
                 //setValues(null, null);
-
                 if (this.sessionContext.get() == null) {
                     this.sessionContext.set(new SessionContext());
                 }
                 this.sessionContext.get().setId(null);
                 this.sessionContext.get().setSession(null);
-
                 session = null;
             }
         }
@@ -171,7 +169,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
             session = this.sessionContext.get().getSession();
         } else {
             byte[] data = this.dataCache.get(sessionId);
-
             boolean isPersisted = false;
             SessionMetadata metadata = null;
             if (data == null) {
@@ -201,8 +198,8 @@ public class SessionManager extends ManagerBase implements Lifecycle {
                     log.error("Error occured while de-serializing the session object..", ex);
                 }
             }
+            
             //setValues(sessionId, session, isPersisted, metadata);
-
             if (this.sessionContext.get() == null) {
                 this.sessionContext.set(new SessionContext());
             }
@@ -251,8 +248,8 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 
                 this.dataCache.set(newSession.getId(), serializer.serializeSessionData(newSession, metadata));
                 newSession.resetDirtyTracking();
+                
                 //setValues(true, metadata);
-
                 if (this.sessionContext.get() == null) {
                     this.sessionContext.set(new SessionContext());
                 }
