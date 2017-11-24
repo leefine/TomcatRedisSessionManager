@@ -2,12 +2,10 @@ package com.leefine.tomcat.redis;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
- * 
  * Session context uses to manage current session data.
-
  */
 public class SessionContext {
-
+	
 	private String id;
 	private Session session;
 	private boolean persisted;
@@ -49,5 +47,5 @@ public class SessionContext {
 	public String toString() {
 		return "SessionContext [id=" + id + "]";
 	}
-
+	
 }
