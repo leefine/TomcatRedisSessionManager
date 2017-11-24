@@ -73,7 +73,9 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 
 		boolean initializedValve = false;
 		Context context = getContextIns();
-		for (Valve valve : context.getPipeline().getValves()) {
+		Valve[] vals = context.getPipeline().getValves();
+		for (Valve valve : vals) {
+		//for (Valve valve : context.getPipeline().getValves()) {
 			if (valve instanceof SessionHandlerValve) {
 				this.handlerValve = (SessionHandlerValve) valve;
 				this.handlerValve.setSessionManager(this);
