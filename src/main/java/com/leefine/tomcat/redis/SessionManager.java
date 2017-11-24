@@ -87,7 +87,15 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		if (!initializedValve)
 			throw new LifecycleException("Session handling valve is not initialized..");
 
-		initialize();
+		try {
+			this.dataCache = new RedisDataCache();
+			this.serializer = new SerializationUtil();
+			ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
+			this.serializer.setClassLoader(loader);
+      		  } catch (Exception ex) {
+			log.error("Error occured while initializing the session manager..", ex);
+			throw ex;
+		 }
 
 		log.info("The sessions will expire after " + (getSessionTimeout()) + " seconds.");
 		context.setDistributable(true);
@@ -204,7 +212,7 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 		// Auto-generated method stub
 	}
 
-	private void initialize() {
+	/*private void initialize() {
 		try {
 			this.dataCache = new RedisDataCache();
 			this.serializer = new SerializationUtil();
@@ -215,7 +223,7 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 			log.error("Error occured while initializing the session manager..", ex);
 			throw ex;
 		}
-	}
+	}*/
 
 	public void save(org.apache.catalina.Session session, boolean forceSave) {
 		try {
