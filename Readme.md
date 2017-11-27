@@ -59,6 +59,10 @@
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">This supports, both redis stand-alone and multiple node cluster based on the redis-data-cache.properties configuration.</li>
     </ul>
-   
-
+     <h3 class="unchanged rich-diff-level-one">
+      Compare with spring-session:</h3>
+      <ul class="unchanged rich-diff-level-one">
+        <li class="unchanged">No need to modify web application(need spring framework)</li>
+        <li class="unchanged">Need to modify tomcat conf</li>
+      </ul>
 </div>
