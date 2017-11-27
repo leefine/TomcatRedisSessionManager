@@ -61,7 +61,7 @@
           <li class="unchanged">This does't support HttpSessionListener(if you want to use [sessionDestroyed])</li>        
     </ul>
      <h3 class="unchanged rich-diff-level-one">
-      Compare with spring-session:</h3>
+      Compare with Spring-Session:</h3>
       <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">No need to modify web application,if use spring-session you need spring framework</li>
         <li class="unchanged">Just modify tomcat conf and add jars</li>
