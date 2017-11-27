@@ -65,6 +65,6 @@
       <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">No need to modify web application,if use spring-session you need spring framework</li>
         <li class="unchanged">Just modify tomcat conf and add jars</li>
-        <li class="unchanged">Only work with tomcat,Spring-session can work with tomcat,jetty,jboss etc</li>
+        <li class="unchanged">Only work with tomcat,Spring-session can work with tomcat,jetty,jboss,etc</li>
       </ul>
 </div>
