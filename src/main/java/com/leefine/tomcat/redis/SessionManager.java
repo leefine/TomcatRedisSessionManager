@@ -287,6 +287,21 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 
     private int getSessionTimeout() {
         return getContextIns().getSessionTimeout() * 60;
+    }    
+    
+    private Context getContextIns() {
+        try {
+            Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
+            return (Context) method.invoke(this);
+        } catch (Exception ex) {
+            try {
+                Method method = this.getClass().getSuperclass().getDeclaredMethod("getContainer");
+                return (Context) method.invoke(this);
+            } catch (Exception ex2) {
+                log.error("Error in getContext", ex2);
+            }
+        }
+        return null;
     }
 
 /*    private void setValues(String sessionId, Session session) {
@@ -316,18 +331,4 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         this.sessionContext.get().setPersisted(isPersisted);
     }*/
 
-    private Context getContextIns() {
-        try {
-            Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
-            return (Context) method.invoke(this);
-        } catch (Exception ex) {
-            try {
-                Method method = this.getClass().getSuperclass().getDeclaredMethod("getContainer");
-                return (Context) method.invoke(this);
-            } catch (Exception ex2) {
-                log.error("Error in getContext", ex2);
-            }
-        }
-        return null;
-    }
 }
