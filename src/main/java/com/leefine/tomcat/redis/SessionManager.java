@@ -87,10 +87,10 @@ public class SessionManager extends ManagerBase implements Lifecycle {
             throw new LifecycleException("Session handling valve is not initialized..");
 
         try {
-            this.dataCache = new RedisDataCache();
-            this.serializer = new SerializationUtil();
+            this.dataCache = new RedisDataCache();            
             ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
-            this.serializer.setClassLoader(loader);
+            this.serializer = new SerializationUtil(loader);
+            //this.serializer.setClassLoader(loader);
         } catch (Exception ex) {
             log.error("Error occured while initializing the session manager..", ex);
             throw ex;
