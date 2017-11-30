@@ -15,7 +15,6 @@ public class Constants  {
     // redis properties
     public static final String HOSTS = "redis.hosts";
     public static final String CLUSTER_ENABLED = "redis.cluster.enabled";
-
     public static final String MAX_ACTIVE = "redis.max.active";
     public static final String TEST_ONBORROW = "redis.test.onBorrow";
     public static final String TEST_ONRETURN = "redis.test.onReturn";
@@ -24,12 +23,13 @@ public class Constants  {
     public static final String TEST_WHILEIDLE = "redis.test.whileIdle";
     public static final String TEST_NUMPEREVICTION = "redis.test.numPerEviction";
     public static final String TIME_BETWEENEVICTION = "redis.time.betweenEviction";
-
     public static final String PASSWORD = "redis.password";
     public static final String DATABASE = "redis.database";
     public static final String TIMEOUT = "redis.timeout";
+    public static final String MAXATTEMPTS = "redis.maxAttempts";
 
     // redis property default values
+    public static final String MAXATTEMPTS_VALUE = "3";
     public static final String DEFAULT_MAX_ACTIVE_VALUE = "10";
     public static final String DEFAULT_TEST_ONBORROW_VALUE = "true";
     public static final String DEFAULT_TEST_ONRETURN_VALUE = "true";
