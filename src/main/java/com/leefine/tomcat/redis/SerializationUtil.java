@@ -26,8 +26,8 @@ public class SerializationUtil {
 	public byte[] getSessionAttributesHashCode(Session session) throws IOException {
 		byte[] serialized = null;
 		Map<String, Object> attributes = new HashMap<String, Object>();
-
-		for (Enumeration<String> enumerator = session.getAttributeNames(); enumerator.hasMoreElements();) {
+		Enumeration<String> enumerator = session.getAttributeNames();
+		while(enumerator.hasMoreElements();) {
 			String key = enumerator.nextElement();
 			attributes.put(key, session.getAttribute(key));
 		}
