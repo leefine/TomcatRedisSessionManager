@@ -8,8 +8,8 @@
     <h2 class="unchanged rich-diff-level-one">Supports:</h2>
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">Apache Tomcat 7</li>
-        <li class="unchanged">Apache Tomcat 8</li>
-        <li class="unchanged">Apache Tomcat 9</li>
+        <li class="unchanged">Apache Tomcat 8 (recommended)</li>
+        <li class="unchanged">Apache Tomcat 9 (recommended)</li>
     </ul>
     <h4 class="unchanged rich-diff-level-one">Dependency:</h4>
     <ol class="unchanged rich-diff-level-one">
