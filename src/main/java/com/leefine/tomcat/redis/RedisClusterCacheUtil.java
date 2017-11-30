@@ -24,6 +24,10 @@ public class RedisClusterCacheUtil implements DataCache {
         cluster = new JedisCluster(nodes, timeout, poolConfig);
     }
 
+    public RedisClusterCacheUtil(Set<HostAndPort> nodes, int connectionTimeout, int soTimeout, int maxAttempts, String password, JedisPoolConfig poolConfig) {
+        cluster = new JedisCluster(nodes, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
+    }
+
     @Override
     public byte[] set(String key, byte[] value) {
         int tries = 0;
