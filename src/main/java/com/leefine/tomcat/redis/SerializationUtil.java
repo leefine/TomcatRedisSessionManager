@@ -19,7 +19,7 @@ public class SerializationUtil {
 	private ClassLoader loader;
 	private Log log = LogFactory.getLog(SerializationUtil.class);
 
-	public void setClassLoader(ClassLoader loader) {
+	public SerializationUtil(ClassLoader loader) {
 		this.loader = loader;
 	}
 
