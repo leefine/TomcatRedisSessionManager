@@ -20,9 +20,9 @@ public class SessionManager extends ManagerBase implements Lifecycle {
 
     private DataCache dataCache;
     protected SerializationUtil serializer;
-    protected ThreadLocal<SessionContext> sessionContext = new ThreadLocal<>();
     protected SessionHandlerValve handlerValve;
     protected Set<SessionPolicy> sessionPolicy = EnumSet.of(SessionPolicy.DEFAULT);
+    protected ThreadLocal<SessionContext> sessionContext = new ThreadLocal<>();
     private Log log = LogFactory.getLog(SessionManager.class);
 
     public String getSessionPersistPolicies() {
