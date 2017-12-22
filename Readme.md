@@ -51,7 +51,8 @@
         </li>
          <li class="unchanged">
             <p class="unchanged">Config Nginx</p>
-            <ul class="unchanged"><li class="unchanged">Check file<b>Nginx.conf</b></li>
+            <ul class="unchanged"><li class="unchanged"> Modify <b>conf/Nginx.conf</b> In Nginx</li>
+<li class="unchanged"> this is a configiration demo: https://github.com/leefine/TomcatRedisSessionManager/blob/master/conf/nginx.conf</li>
             </ul>
         </li>
     </ol>
