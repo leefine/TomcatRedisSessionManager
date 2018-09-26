@@ -60,7 +60,7 @@
       Note:</h3>
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">This supports, both redis stand-alone and multiple node cluster based on the redis-server.properties configuration.</li>
-          <li class="unchanged">This does't support HttpSessionListener(if you want to use [sessionDestroyed])</li>        
+          <li class="unchanged">Before 1.0.3 ,That does't support HttpSessionListener(if you want to use [sessionDestroyed])</li>                 <li class="unchanged">From 1.0.3 ,That support HttpSessionListener(if you want to use [sessionDestroyed])</li>       
     </ul>
      <h3 class="unchanged rich-diff-level-one">
       Compare with Spring-Session:</h3>
