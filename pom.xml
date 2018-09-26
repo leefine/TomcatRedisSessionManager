@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.leefine</groupId>
     <artifactId>TomcatRedisSessionManager</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <url>https://github.com/leefine/TomcatRedisSessionManager</url>
     <build>
         <plugins>
@@ -34,7 +34,7 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
             <!--Only for debug,you can select your tomcat viersion-->
-            <version>8.5.23</version>
+            <version>8.5.34</version>
         </dependency>
     </dependencies>
 </project>
