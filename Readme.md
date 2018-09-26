@@ -5,7 +5,7 @@
     <p class="unchanged rich-diff-level-one">It supports, both single redis master and redis cluster based on the redis-server.properties configuration.</p>
     <p class="unchanged rich-diff-level-one">Going forward, we no need to enable sticky session (JSESSIONID) in Load balancer.</p>  
     <p class="unchanged rich-diff-level-one">Support HTTPS(SSL).</p>  
-    <h3 class="unchanged rich-diff-level-one"><a href="https://github.com/leefine/TomcatRedisSessionManager/files/1581961/TomcatRedisSessionManager-1.0.2.zip">Download:TomcatRedisSessionManager </a>  </h3>
+    <h3 class="unchanged rich-diff-level-one"><a href="https://github.com/leefine/TomcatRedisSessionManager/files/2418381/TomcatRedisSessionManager-1.0.3.zip">Download:TomcatRedisSessionManager </a>  </h3>
     <h2 class="unchanged rich-diff-level-one">Supports:</h2>
     <ul class="unchanged rich-diff-level-one">
         <li class="unchanged">Apache Tomcat 7</li>
