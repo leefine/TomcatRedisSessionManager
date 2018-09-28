@@ -1,7 +1,6 @@
 package com.leefine.tomcat.redis;
 
 import org.apache.catalina.Context;
-import org.apache.catalina.Loader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,23 +36,23 @@ public class SessionObjectInputStream extends ObjectInputStream {
 
     private static Log log = LogFactory.getLog(SessionObjectInputStream.class);
 
-    //private static ClassLoader classLoader = null;
+    private static ClassLoader classLoader = null;
 
     @Override
     protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
         String name = desc.getName();
         try {
-            ClassLoader loader = getClassLoader();
-           /* if (classLoader != null)
+            ClassLoader loader = null;
+            if (classLoader != null)
                 loader = classLoader;
             else
-                loader = Thread.currentThread().getContextClassLoader();*/
+                loader = Thread.currentThread().getContextClassLoader();
 
-            log.info(name);
-            log.info(loader);
+            //log.info(name);
+            //log.info(loader);
 
             Class<?> cls = Class.forName(name, false, loader);
-            //classLoader = loader;
+            classLoader = loader;
             return cls;
         } catch (ClassNotFoundException ex) {
             Class cl = (Class) primClasses.get(name);
@@ -66,16 +65,4 @@ public class SessionObjectInputStream extends ObjectInputStream {
     }
 
 
-    private ClassLoader getClassLoader() {
-        Loader loader = context.getLoader();
-        ClassLoader classLoader = null;
-        if (loader != null) {
-            classLoader = loader.getClassLoader();
-        }
-        if (classLoader == null) {
-            classLoader = getClass().getClassLoader();
-        }
-
-        return classLoader;
-    }
 }
