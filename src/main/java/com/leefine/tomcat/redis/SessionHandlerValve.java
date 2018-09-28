@@ -1,31 +1,30 @@
 package com.leefine.tomcat.redis;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
+
 /**
- * Tomcat clustering with Redis data-cache implementation. * 
- * Valve that implements per-request session persistence. It is intended to be used with non-sticky load-balancers.
+ * Tomcat clustering with Redis data-cache implementation.
+ * <p>
+ * Valve that implements per-request session persistence. It is intended to be
+ * used with non-sticky load-balancers.
  */
 public class SessionHandlerValve extends ValveBase {
-
-	private SessionManager manager;
-
-	public void setSessionManager(SessionManager manager) {
-		this.manager = manager;
-	}
-
-	@Override
-	public void invoke(Request request, Response response) throws IOException, ServletException {
-		try {
-			getNext().invoke(request, response);
-		} finally {
-			manager.afterRequest(request);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void invoke(Request request, Response response)  {
+        try {
+            getNext().invoke(request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
 }
