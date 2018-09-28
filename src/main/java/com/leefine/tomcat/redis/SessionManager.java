@@ -1,16 +1,12 @@
 package com.leefine.tomcat.redis;
 
 import org.apache.catalina.*;
-import org.apache.catalina.connector.Request;
 import org.apache.catalina.session.ManagerBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * Tomcat clustering with Redis data-cache implementation.
@@ -21,53 +17,8 @@ import java.util.Set;
 public class SessionManager extends ManagerBase implements Lifecycle {
 
     private DataCache dataCache;
-    protected SerializationUtil serializer;
-    protected ThreadLocal<SessionContext> sessionContext = new ThreadLocal<>();
     protected SessionHandlerValve handlerValve;
-    protected Set<SessionPolicy> sessionPolicy = EnumSet.of(SessionPolicy.DEFAULT);
     private Log log = LogFactory.getLog(SessionManager.class);
-
-    /**
-     * To get session persist policies
-     *
-     * @return
-     */
-    public String getSessionPersistPolicies() {
-        String policyStr = null;
-        for (SessionPolicy policy : this.sessionPolicy) {
-            policyStr = (policyStr == null) ? policy.name() : policyStr.concat(",").concat(policy.name());
-        }
-        return policyStr;
-    }
-
-    /**
-     * To set session persist policies
-     *
-     * @param policyStr
-     */
-    public void setSessionPersistPolicies(String policyStr) {
-        Set<SessionPolicy> policySet = EnumSet.of(SessionPolicy.DEFAULT);
-        String[] policyArray = policyStr.split(",");
-
-        for (String policy : policyArray) {
-            policySet.add(SessionPolicy.fromName(policy));
-        }
-        this.sessionPolicy = policySet;
-    }
-
-    /**
-     * @return
-     */
-    public boolean getSaveOnChange() {
-        return this.sessionPolicy.contains(SessionPolicy.SAVE_ON_CHANGE);
-    }
-
-    /**
-     * @return
-     */
-    public boolean getAlwaysSaveAfterRequest() {
-        return this.sessionPolicy.contains(SessionPolicy.ALWAYS_SAVE_AFTER_REQUEST);
-    }
 
     /**
      * {@inheritDoc}
@@ -102,11 +53,17 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         super.setState(LifecycleState.STARTING);
 
         boolean initializedValve = false;
-        Context context = getContextIns();
+        Context context = this.getContext();// getContextIns();
+        log.info(this.getClass().getClassLoader());
+        //ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
+        //log.info(loader);
+        //log.info(loader.getParent());
+
+        //log.info(context.getLoader().getClassLoader());
+
         for (Valve valve : context.getPipeline().getValves()) {
             if (valve instanceof SessionHandlerValve) {
                 this.handlerValve = (SessionHandlerValve) valve;
-                this.handlerValve.setSessionManager(this);
                 initializedValve = true;
                 break;
             }
@@ -115,27 +72,10 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         if (!initializedValve)
             throw new LifecycleException("Session handling valve is not initialized..");
 
-        initialize();
+        this.dataCache = new RedisDataCache();
 
         log.info("The sessions will expire after " + (getSessionTimeout()) + " seconds.");
         context.setDistributable(true);
-    }
-
-
-    /**
-     * To initialize the session manager
-     */
-    private void initialize() {
-        try {
-            this.dataCache = new RedisDataCache();
-            this.serializer = new SerializationUtil();
-            Context context = getContextIns();
-            ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
-            this.serializer.setClassLoader(loader);
-        } catch (Exception ex) {
-            log.error("Error occured while initializing the session manager..", ex);
-            throw ex;
-        }
     }
 
     /**
@@ -152,33 +92,15 @@ public class SessionManager extends ManagerBase implements Lifecycle {
      */
     @Override
     public Session createSession(String sessionId) {
-        if (sessionId != null) {
-            sessionId = (this.dataCache.setnx(sessionId, Constants.NULL_SESSION) == 0L) ? null : sessionId;
-        } else {
-            do {
-                sessionId = generateSessionId();
-            } while (this.dataCache.setnx(sessionId, Constants.NULL_SESSION) == 0L);
-        }
-
-        Session session = (sessionId != null) ? (Session) createEmptySession() : null;
-        if (session != null) {
-            session.setId(sessionId);
-            session.setNew(true);
-            session.setValid(true);
-            session.setCreationTime(System.currentTimeMillis());
-            session.setMaxInactiveInterval(getSessionTimeout());
-            session.tellNew();
-
-            setValues(sessionId, session, false, new SessionMetadata());
-
-            try {
-                save(session, true);
-            } catch (Exception ex) {
-                log.error("Error occured while creating session..", ex);
-                setValues(null, null);
-                session = null;
-            }
-        }
+        Session session = createEmptySession();
+        session.setNew(true);
+        session.setValid(true);
+        session.setCreationTime(System.currentTimeMillis());
+        session.setMaxInactiveInterval(getSessionTimeout());
+        if (sessionId == null) sessionId = this.generateSessionId();
+        session.setId(sessionId);
+        session.tellNew();
+        save(session);
         return session;
     }
 
@@ -194,57 +116,36 @@ public class SessionManager extends ManagerBase implements Lifecycle {
      * {@inheritDoc}
      */
     @Override
-    public void add(org.apache.catalina.Session session) {
-        //add this line for HttpSessionListener sessionDestroyed
-        if (Constants.IS_MONITOR_SESSION_DESTROYED)
-            this.sessions.put(session.getIdInternal(), session);
+    public Session findSession(String sessionId) {
+        Session session = null;
+        byte[] data = this.dataCache.get(sessionId);
+        if (data != null) {
+            if (Arrays.equals(Constants.NULL_SESSION, data)) return null;
+            SessionMetadata metadata = new SessionMetadata();
+            Session newSession = createEmptySession();
+            SerializationUtil.deserializeSessionData(data, newSession, metadata,this.getContext());
+            newSession.setId(sessionId);
+            newSession.access();
+            newSession.setNew(false);
+            newSession.setValid(true);
+            newSession.setMaxInactiveInterval(getSessionTimeout());
+            newSession.endAccess();
+            session = newSession;
+        }
 
-        //save(session, false);
+        return session;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Session findSession(String sessionId) throws IOException {
-        Session session = null;
-        if (sessionId != null && this.sessionContext.get() != null && sessionId.equals(this.sessionContext.get().getId())) {
-            session = this.sessionContext.get().getSession();
-        } else {
-            byte[] data = this.dataCache.get(sessionId);
-
-            boolean isPersisted = false;
-            SessionMetadata metadata = null;
-            if (data == null) {
-                session = null;
-                metadata = null;
-                sessionId = null;
-                isPersisted = false;
-            } else {
-                if (Arrays.equals(Constants.NULL_SESSION, data)) {
-                    throw new IOException("NULL session data");
-                }
-                try {
-                    metadata = new SessionMetadata();
-                    Session newSession = (Session) createEmptySession();
-                    this.serializer.deserializeSessionData(data, newSession, metadata);
-
-                    newSession.setId(sessionId);
-                    newSession.access();
-                    newSession.setNew(false);
-                    newSession.setValid(true);
-                    newSession.resetDirtyTracking();
-                    newSession.setMaxInactiveInterval(getSessionTimeout());
-
-                    session = newSession;
-                    isPersisted = true;
-                } catch (Exception ex) {
-                    log.error("Error occured while de-serializing the session object..", ex);
-                }
-            }
-            setValues(sessionId, session, isPersisted, metadata);
+    public void add(org.apache.catalina.Session session) {
+        //add this line for HttpSessionListener sessionDestroyed
+        if (Constants.IS_MONITOR_SESSION_DESTROYED) {
+            this.sessions.put(session.getIdInternal(), session);
         }
-        return session;
+        save(session);
     }
 
     /**
@@ -260,8 +161,67 @@ public class SessionManager extends ManagerBase implements Lifecycle {
      */
     @Override
     public void remove(org.apache.catalina.Session session, boolean update) {
-        this.dataCache.expire(session.getId(), 6);
+        if (update) {
+            long timeNow = System.currentTimeMillis();
+            int timeAlive =
+                    (int) (timeNow - session.getCreationTimeInternal()) / 1000;
+            updateSessionMaxAliveTime(timeAlive);
+            expiredSessions.incrementAndGet();
+            SessionTiming timing = new SessionTiming(timeNow, timeAlive);
+            synchronized (sessionExpirationTiming) {
+                sessionExpirationTiming.add(timing);
+                sessionExpirationTiming.poll();
+            }
+        }
+
+        if (session.getIdInternal() != null) {
+            this.dataCache.expire(session.getId(), 10);
+            if (Constants.IS_MONITOR_SESSION_DESTROYED)
+                this.sessions.remove(session.getIdInternal());
+        }
     }
+
+    /**
+     * To save session object to data-cache
+     *
+     * @param session
+     */
+    public void save(org.apache.catalina.Session session) {
+        Session newSession = (Session) session;
+        SessionMetadata metadata = new SessionMetadata();
+        this.dataCache.set(newSession.getId(), SerializationUtil.serializeSessionData(newSession, metadata));
+        this.dataCache.expire(newSession.getId(), getSessionTimeout());
+    }
+
+    /**
+     * @return
+     */
+    private static int sessionTimeout = 0;
+
+    private int getSessionTimeout() {
+        if (sessionTimeout == 0)
+            sessionTimeout = this.getContext().getSessionTimeout() * 60;
+        return sessionTimeout;
+    }
+
+    /**
+     * @return
+     */
+/*    private Context getContextIns() {
+        try {
+            Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
+            return (Context) method.invoke(this);
+        } catch (Exception ex) {
+            try {
+                Method method = this.getClass().getSuperclass().getDeclaredMethod("getContainer");
+                return (Context) method.invoke(this);
+            } catch (Exception ex2) {
+                log.error("Error in getContext", ex2);
+            }
+        }
+        return null;
+    }*/
+
 
     /**
      * {@inheritDoc}
@@ -277,126 +237,5 @@ public class SessionManager extends ManagerBase implements Lifecycle {
     @Override
     public void unload() throws IOException {
         // Auto-generated method stub
-    }
-
-
-    /**
-     * To save session object to data-cache
-     *
-     * @param session
-     * @param forceSave
-     */
-    public void save(org.apache.catalina.Session session, boolean forceSave) {
-        try {
-            Boolean isPersisted;
-            Session newSession = (Session) session;
-            byte[] hash = (this.sessionContext.get() != null && this.sessionContext.get().getMetadata() != null)
-                    ? this.sessionContext.get().getMetadata().getAttributesHash() : null;
-            byte[] currentHash = serializer.getSessionAttributesHashCode(newSession);
-
-            if (forceSave || newSession.isDirty()
-                    || (isPersisted = (this.sessionContext.get() != null) ? this.sessionContext.get().isPersisted() : null) == null
-                    || !isPersisted || !Arrays.equals(hash, currentHash)) {
-
-                SessionMetadata metadata = new SessionMetadata();
-                metadata.setAttributesHash(currentHash);
-
-                this.dataCache.set(newSession.getId(), serializer.serializeSessionData(newSession, metadata));
-                newSession.resetDirtyTracking();
-                setValues(true, metadata);
-            }
-
-            int timeout = getSessionTimeout();
-            this.dataCache.expire(newSession.getId(), timeout);
-            log.trace("Session [" + newSession.getId() + "] expire in [" + timeout + "] seconds.");
-
-        } catch (IOException ex) {
-            log.error("Error occured while saving the session object in data cache..", ex);
-        }
-    }
-
-    /**
-     * To process post request process
-     *
-     * @param request
-     */
-    public void afterRequest(Request request) {
-        Session session = null;
-        try {
-            session = (this.sessionContext.get() != null) ? this.sessionContext.get().getSession() : null;
-            if (session != null) {
-                if (session.isValid())
-                    save(session, getAlwaysSaveAfterRequest());
-                else
-                    remove(session);
-                log.trace("Session object " + (session.isValid() ? "saved: " : "removed: ") + session.getId());
-            }
-        } catch (Exception ex) {
-            log.error("Error occured while processing post request process..", ex);
-        } finally {
-            this.sessionContext.remove();
-            log.trace("Session removed from ThreadLocal:" + ((session != null) ? session.getIdInternal() : ""));
-        }
-    }
-
-    /**
-     * @return
-     */
-    private int getSessionTimeout() {
-        int timeout = getContextIns().getSessionTimeout() * 60;
-        return timeout;
-    }
-
-    /**
-     * @param sessionId
-     * @param session
-     */
-    private void setValues(String sessionId, Session session) {
-        if (this.sessionContext.get() == null) {
-            this.sessionContext.set(new SessionContext());
-        }
-        this.sessionContext.get().setId(sessionId);
-        this.sessionContext.get().setSession(session);
-    }
-
-    /**
-     * @param isPersisted
-     * @param metadata
-     */
-    private void setValues(boolean isPersisted, SessionMetadata metadata) {
-        if (this.sessionContext.get() == null) {
-            this.sessionContext.set(new SessionContext());
-        }
-        this.sessionContext.get().setMetadata(metadata);
-        this.sessionContext.get().setPersisted(isPersisted);
-    }
-
-    /**
-     * @param sessionId
-     * @param session
-     * @param isPersisted
-     * @param metadata
-     */
-    private void setValues(String sessionId, Session session, boolean isPersisted, SessionMetadata metadata) {
-        setValues(sessionId, session);
-        setValues(isPersisted, metadata);
-    }
-
-    /**
-     * @return
-     */
-    private Context getContextIns() {
-        try {
-            Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
-            return (Context) method.invoke(this);
-        } catch (Exception ex) {
-            try {
-                Method method = this.getClass().getSuperclass().getDeclaredMethod("getContainer");
-                return (Context) method.invoke(this);
-            } catch (Exception ex2) {
-                log.error("Error in getContext", ex2);
-            }
-        }
-        return null;
     }
 }
