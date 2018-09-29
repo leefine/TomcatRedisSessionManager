@@ -48,9 +48,6 @@ public class SessionObjectInputStream extends ObjectInputStream {
             else
                 loader = Thread.currentThread().getContextClassLoader();
 
-            //log.info(name);
-            //log.info(loader);
-
             Class<?> cls = Class.forName(name, false, loader);
             classLoader = loader;
             return cls;
@@ -59,10 +56,9 @@ public class SessionObjectInputStream extends ObjectInputStream {
             if (cl != null) {
                 return cl;
             } else {
+                classLoader = null;
                 throw ex;
             }
         }
     }
-
-
 }
