@@ -49,7 +49,6 @@ public class SerializationUtil {
         ObjectInputStream ois = null;
         try {
             bis = new BufferedInputStream(new ByteArrayInputStream(data));
-            //ois = new CustomObjectInputStream(bis, this.loader);
             ois = new SessionObjectInputStream(bis,context);
             SessionMetadata serializedMetadata = (SessionMetadata) ois.readObject();
             metadata.copyFieldsFrom(serializedMetadata);
