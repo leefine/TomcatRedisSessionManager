@@ -20,46 +20,13 @@ public class SessionManager extends ManagerBase implements Lifecycle {
     protected SessionHandlerValve handlerValve;
     private Log log = LogFactory.getLog(SessionManager.class);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addLifecycleListener(LifecycleListener listener) {
-        super.addLifecycleListener(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LifecycleListener[] findLifecycleListeners() {
-        return super.findLifecycleListeners();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removeLifecycleListener(LifecycleListener listener) {
-        super.removeLifecycleListener(listener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected synchronized void startInternal() throws LifecycleException {
         super.startInternal();
         super.setState(LifecycleState.STARTING);
 
         boolean initializedValve = false;
-        Context context = this.getContext();// getContextIns();
-        log.info(this.getClass().getClassLoader());
-        //ClassLoader loader = (context != null && context.getLoader() != null) ? context.getLoader().getClassLoader() : null;
-        //log.info(loader);
-        //log.info(loader.getParent());
-
-        //log.info(context.getLoader().getClassLoader());
+        Context context = this.getContext();
 
         for (Valve valve : context.getPipeline().getValves()) {
             if (valve instanceof SessionHandlerValve) {
@@ -78,18 +45,12 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         context.setDistributable(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected synchronized void stopInternal() throws LifecycleException {
         super.setState(LifecycleState.STOPPING);
         super.stopInternal();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Session createSession(String sessionId) {
         Session session = createEmptySession();
@@ -104,17 +65,11 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         return session;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Session createEmptySession() {
         return new Session(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Session findSession(String sessionId) {
         Session session = null;
@@ -123,7 +78,7 @@ public class SessionManager extends ManagerBase implements Lifecycle {
             if (Arrays.equals(Constants.NULL_SESSION, data)) return null;
             SessionMetadata metadata = new SessionMetadata();
             Session newSession = createEmptySession();
-            SerializationUtil.deserializeSessionData(data, newSession, metadata,this.getContext());
+            SerializationUtil.deserializeSessionData(data, newSession, metadata, this.getContext());
             newSession.setId(sessionId);
             newSession.access();
             newSession.setNew(false);
@@ -136,9 +91,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         return session;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void add(org.apache.catalina.Session session) {
         //add this line for HttpSessionListener sessionDestroyed
@@ -148,17 +100,11 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         save(session);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void remove(org.apache.catalina.Session session) {
         remove(session, false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void remove(org.apache.catalina.Session session, boolean update) {
         if (update) {
@@ -181,11 +127,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         }
     }
 
-    /**
-     * To save session object to data-cache
-     *
-     * @param session
-     */
     public void save(org.apache.catalina.Session session) {
         Session newSession = (Session) session;
         SessionMetadata metadata = new SessionMetadata();
@@ -193,9 +134,6 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         this.dataCache.expire(newSession.getId(), getSessionTimeout());
     }
 
-    /**
-     * @return
-     */
     private static int sessionTimeout = 0;
 
     private int getSessionTimeout() {
@@ -204,38 +142,26 @@ public class SessionManager extends ManagerBase implements Lifecycle {
         return sessionTimeout;
     }
 
-    /**
-     * @return
-     */
-/*    private Context getContextIns() {
-        try {
-            Method method = this.getClass().getSuperclass().getDeclaredMethod("getContext");
-            return (Context) method.invoke(this);
-        } catch (Exception ex) {
-            try {
-                Method method = this.getClass().getSuperclass().getDeclaredMethod("getContainer");
-                return (Context) method.invoke(this);
-            } catch (Exception ex2) {
-                log.error("Error in getContext", ex2);
-            }
-        }
-        return null;
-    }*/
-
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void load() throws ClassNotFoundException, IOException {
-        // Auto-generated method stub
+    public void addLifecycleListener(LifecycleListener listener) {
+        super.addLifecycleListener(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return super.findLifecycleListeners();
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+        super.removeLifecycleListener(listener);
+    }
+
+    @Override
+    public void load() throws ClassNotFoundException, IOException {
+    }
+
     @Override
     public void unload() throws IOException {
-        // Auto-generated method stub
     }
 }
